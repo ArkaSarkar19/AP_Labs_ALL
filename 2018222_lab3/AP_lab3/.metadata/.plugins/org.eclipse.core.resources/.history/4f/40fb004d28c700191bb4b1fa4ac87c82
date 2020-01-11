@@ -1,0 +1,30 @@
+package archlegends;
+public interface hero {
+	public void attack();
+	public void defense();
+	public void specialmove();
+}
+
+final class warrior implements hero{
+	final private int attack = 10;
+	final private int defense = 3;
+	private boolean hasspecialpower = false;
+	private int moves = 0;
+	final private int specialpoer = 5;
+	@Override
+	public void attack() {
+				
+	}
+
+	@Override
+	public void defense() {
+		
+	}
+
+	@Override
+	public void specialmove() {
+		
+	}
+	
+	private 
+}

@@ -1,0 +1,46 @@
+package archlegends;
+public interface hero {
+	public int attack();
+	public int defense();
+	public void specialmove();
+	public void levelup();
+}
+
+final class warrior implements hero{
+	private int attack = 10;
+	private int defense = 3;
+	private boolean hasspecialpower = false;
+	private int moves = 0;
+	private int specialmove = 0;
+	final private int specialpower = 5;
+	@Override
+	public int attack() {
+		int ans = (this.hasspecialpower)? this.attack+5 : this.attack;
+		this.moves++;
+		this.checkspecialmove();
+		return ans;
+	}
+
+	@Override
+	public int defense() {
+		int ans = (this.hasspecialpower)? this.defense+5 : this.defense;
+		this.moves++;
+		this.checkspecialmove();
+		return ans;	}
+
+	@Override
+	public void specialmove() {
+		this.hasspecialpower = true;
+		this.specialmove = this.moves;
+	}
+	
+	private boolean checkspecialmove() {
+		return (this.moves - this.specialmove) >2;
+	}
+	
+	@Override
+	public void levelup() {
+		this.attack+=1;
+		this.defense+=1;
+	}
+}

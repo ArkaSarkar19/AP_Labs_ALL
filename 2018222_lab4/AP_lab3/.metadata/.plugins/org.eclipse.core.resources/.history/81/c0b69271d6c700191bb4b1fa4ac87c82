@@ -1,0 +1,25 @@
+package archlegends;
+
+public class user {
+	final private String username;
+	private Hero myhero;
+	private boolean gamewon;
+	public user(String username, Hero myhero) {
+		this.username = username;
+		this.myhero = myhero;
+		this.gamewon = false;
+	}
+	public String getusername() {
+		return this.username;
+	}
+	public Hero getmyhero() {
+		return this.myhero;
+	}
+	public void setgamewon(boolean s) {
+		gamewon = s;
+	}
+	public boolean getgameswon() {
+		return this.gamewon;
+	}
+	
+}

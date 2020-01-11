@@ -1,0 +1,151 @@
+package archlegends;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Scanner;
+public class main {
+	private static ArrayList<user> allusers = new ArrayList<user>();
+	public static void main(String[] args) {
+		Scanner stdin = new Scanner(System.in);
+		while(true) {
+			System.out.println(">>>>>>>>>    Welcome to ArchLegends   <<<<<<<<<<");
+			System.out.println("Choose your option");
+			System.out.println("1) New User");
+			System.out.println("2) Existing User");
+			System.out.println("3) Exit");
+			int query = stdin.nextInt();
+			switch(query) {
+			case 1:
+				System.out.println("Enter Username");
+				String name1 = stdin.next();
+				System.out.println("Choose Hero");
+				System.out.println("1) Warrior");
+				System.out.println("2) Thief");
+				System.out.println("3) Mage");
+				System.out.println("4) Healer");
+				Hero newhero = null;
+				String heroname = null;
+				int q1 = stdin.nextInt();
+				if(q1==1) {
+					newhero = new Warrior();
+					heroname = "Warrior";
+				}
+				if(q1==2) {
+					newhero = new Thief();
+					heroname = "Thief";
+
+				}
+				if(q1==3) {
+					newhero = new Mage();
+					heroname = "Mage";
+
+				}
+				if(q1==4) {
+					newhero = new Healer();
+					heroname = "Healer";
+
+				}
+				user newuser = new user(name1,newhero);
+				allusers.add(newuser);
+				System.out.println("User Creation done. Username: " + name1 + ".Hero type: " + heroname +  ". Log in to play the game . Exiting");
+				break;
+			case 2:
+				System.out.println("Enter Username");
+				String name2 = stdin.next();
+				user curruser = null;
+				for(int i=0;i<allusers.size();i++) {
+					if(allusers.get(i).getusername().equals(name2)) {
+						curruser = allusers.get(i);
+						System.out.println("User Found... logging in");
+						break;
+					}
+				}
+				System.out.println("Welcome " + curruser.getusername());
+				game currgame = new game(curruser);
+				curruser.newgame(currgame);
+				while(!curruser.haswon()) {
+					int currpos = currgame.getcurrposition();
+					if(currpos==0) {
+						System.out.println("You are at the starting location. Choose path:");
+						LinkedList<node> nextpaths = currgame.getnext();
+						for(int i=0;i<nextpaths.size();i++) {
+							System.out.println(i+1 + ")" + "Go to Location "  + nextpaths.get(i).getlocation());
+						}
+						System.out.println("Enter -1 to exit");
+						int pos2 = stdin.nextInt();
+						if(pos2==-1) System.exit(0);
+						currpos = nextpaths.get(pos2-1).getvertex();
+						System.out.println("Moving to Location " + currpos);
+						currgame.setcurrposition(currpos);
+					}
+					else {
+						System.out.println("You are at the starting " + currpos + ". Choose path:");
+						LinkedList<node> nextpaths = currgame.getnext();
+						for(int i=0;i<nextpaths.size();i++) {
+							System.out.println(i+1 + ")" + "Go to Location "  + nextpaths.get(i).getlocation());
+						}
+						System.out.println("4) Go back");
+						int pos2 = stdin.nextInt();
+						if(pos2==4) System.out.println("Going back");
+						else {
+							currpos = nextpaths.get(pos2-1).getvertex();
+							System.out.println("Moving to Location " + currpos);
+							currgame.setcurrposition(currpos);
+
+
+						}
+					}
+					System.out.println("!!!!!!  Fight Started  !!!!!!");
+
+					monster currmonster = currgame.startfight();
+					while(!currmonster.isdead()) {
+						System.out.println("Choose move:");
+						if(curruser.getmyhero().hasspecialmove()) {
+							System.out.println("1) Attack");
+							System.out.println("2) Defense");
+							System.out.println("3) Special Move");
+							
+						}
+						else {
+							System.out.println("1) Attack");
+							System.out.println("2) Defense");
+						}
+						int in1 = stdin.nextInt();
+						if(in1==1) {
+							System.out.println("You choose to attack.");
+							curruser.getmyhero().attack(currmonster);
+							System.out.println("You attacked and inflicted "+  curruser.getmyhero().getattackvalues() +" damage to the monster.");
+							System.out.println("Your Hp: " + curruser.getmyhero().gethp() + "/" + curruser.getmyhero().gethp() + "Monsters Hp: "  + currmonster.getHP()+"/"+currmonster.getmaxHP());
+							System.out.println("Monster attack!");
+							int damage = curruser.getmyhero().attacked(currmonster);
+						}
+						if(in1==2) {
+							System.out.println("You choose to defend.");
+							System.out.println("Monster attack reduced by" +  curruser.getmyhero().ge);
+						}
+						if(in1==3) {
+							System.out.println("Special power activated");
+							System.out.println("Performing special attack");
+							
+						}
+						
+						if(curruser.getmyhero().isdead()) {
+							System.out.println("You Lost");
+							System.exit(0);
+						}
+						System.out.println("Monster attacked and inflicted " + damage + " damage to you");
+						System.out.println("Your Hp: " + curruser.getmyhero().gethp() + "/" + curruser.getmyhero().gethp() + "Monsters Hp: "  + currmonster.getHP()+"/"+currmonster.getmaxHP());
+
+					}
+						
+					
+				}
+				
+				break;
+			case 3:
+				System.exit(0);
+				break;
+			}
+			
+		}
+	}
+}

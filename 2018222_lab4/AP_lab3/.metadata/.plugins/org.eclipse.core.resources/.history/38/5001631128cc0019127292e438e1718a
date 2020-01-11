@@ -1,0 +1,93 @@
+package archlegends;
+
+import java.util.ArrayList;
+
+public abstract class sidekick  {
+	protected double HP;
+	protected double XP;
+	protected int attack;
+	protected int maxHP;
+	public sidekick(int attack) {
+		this.attack = attack;
+		this.HP = this.maxHP = 100;
+		this.XP = 0;
+	}
+	public void levelup(int heroxp) {
+		HP = maxHP;
+		double myxp = heroxp/10;
+		XP+=myxp;
+		if(myxp>=5) {
+			attack+=1;
+			
+		}
+	}
+	public int attacked(int a) {
+		HP-=1.5*a;
+		return a;		
+	}
+	public boolean isdead() {
+		return this.HP<=0;
+	}
+	public abstract int specialmove();	
+	public abstract int attack(monster monster);
+}
+
+class minion extends sidekick implements Cloneable{
+	protected boolean hascloned;
+	private ArrayList<minion> clones = new ArrayList<minion>();
+
+	public minion() {
+		super(5);
+		hascloned = false;
+	}
+
+	@Override
+	public int specialmove() {
+		if(hascloned) {
+			System.out.println("Cannot perform move already cloned in another level");
+
+		return 0;
+		}
+		hascloned = true;
+		for(int i=0;i<3;i++) {
+			clones.add(this);
+		}
+		return 1;
+	}
+	public minion clone() {
+		try {
+			minion copy = (minion)super.clone();
+			return copy;
+		}
+		catch(CloneNotSupportedException e) {
+			return null;
+		}
+	}
+	@Override
+	public int attack(monster monster) {
+		monster.attacked(attack);
+		System.out.println("Sidekick attack and inflicted " + attack + " damage to the monster");
+		for(int i=0;i<3;i++) {
+			clones.get(i).attack(monster);
+		}
+		return attack;
+	}
+	
+}
+
+class knight extends sidekick{
+	
+	public knight() {
+		super(2);
+	}
+
+	@Override
+	public int specialmove() {
+		return 5;
+	}
+	@Override
+	public int attack(monster monster) {
+		monster.attacked(attack);
+		return attack;
+	}
+}

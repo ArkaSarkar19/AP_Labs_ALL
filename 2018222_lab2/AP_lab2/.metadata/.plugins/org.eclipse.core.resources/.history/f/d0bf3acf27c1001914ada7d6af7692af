@@ -1,0 +1,362 @@
+package myproj;
+import java.util.*;
+public class mercury {
+	public static ArrayList<merchant> merchants = new ArrayList<merchant>();
+
+	public static void main(String[] args) {
+	Scanner stdin = new Scanner(System.in);
+	String k = stdin.next();
+	
+	
+}
+}
+
+
+class item {
+	private int id;
+	private String name;
+	private float price;
+	private int quantity;
+	private category category;
+	private offer offer = null ;
+	private boolean hasoffer = false;
+	private merchant mymerchant = null;
+
+	public item(int id, String name, float price, int quantity) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		
+	}
+			
+	public void display() {
+		System.out.println(id + " " + name + " " + price + " " + quantity + " ");
+		if(offer !=null) System.out.print(offer.getoffer() + " ");
+		System.out.print(category.getcategory());
+	}
+	public int getid() {
+		return id;
+	}
+	public float getprice() {
+		return price;
+	}
+	public int getquantity() {
+		return quantity;
+	}
+	public String getcategory() {
+		return category.getcategory();
+	}
+	public String getoffer() {
+		if(offer == null) return null;
+		else return offer.getoffer();
+	}
+	public void setprice(float price) {
+		this.price = price;
+	}
+	public void setquantity(int quantity) {
+		this.quantity = quantity;
+	}
+	public void setcategory(category c) {
+		this.category = c;
+	}
+	public void setoffer(offer e) {
+		offer = e;
+		hasoffer = true;
+	}
+	public boolean hasoffer() {
+		return this.hasoffer;
+	}
+	public String getmerchant() {
+		return mymerchant.getname();
+	}
+	public void setmerchant(merchant c) {
+		this.mymerchant = c;
+	}
+}
+
+class offer{
+	private boolean hasoffer;
+	private String offer = null;
+	public offer(int i) {
+		//if i = 1 then buy one get one 
+		//if i = 2 then 25% off
+		if(i == 1) {
+			offer = "Buy one get one free";
+			hasoffer = true;
+		}
+		if(i == 2) {
+			offer = "25% off";
+			hasoffer = true;
+		}
+		
+	}
+	
+	public boolean hasoffer() {
+		return this.hasoffer;
+	}
+	
+	public String getoffer() {
+		return this.offer;
+	}
+	
+}
+
+class merchant implements member{
+	private int rewardslots = 0;
+	private String name;
+	private ArrayList<category> categories;
+	
+	public merchant(String name) {
+		this.name = name;
+		categories = new ArrayList<category>();
+	}
+	
+	public String getname() {
+		return this.name;
+	}
+	
+	private void add(String usr_category, item e) {
+		boolean newcategory = true;
+		for(int i=0;i<categories.size();i++) {
+			if(categories.get(i).getcategory().equals(usr_category)) {
+				categories.get(i).additem(e);
+				newcategory = false;
+			}
+		}
+		if(newcategory) {
+			category addcategory = new category(usr_category);
+			addcategory.additem(e);
+			categories.add(addcategory);
+		}
+	}
+	private void seachindex(int index) {
+		categories.get(index).display();
+	}
+	
+	public void edititem(int code, float price, int quantity) {
+		boolean ans = false;
+		for(int i=0;i<categories.size();i++) {
+			if(categories.get(i).edititem(code, price, quantity)) {
+				ans = true;
+				break;
+			}
+		}
+		if(!ans) System.err.println("Enter a valid code");;
+	}
+
+	
+	
+	@Override
+	public void additem(String category, item e) {
+		e.setmerchant(this);
+		this.add(category,e);
+		
+	}
+
+	@Override
+	public void search(int category) {
+		this.seachindex(category - 1);
+	}
+
+	@Override
+	public void getreward() {
+		System.out.println(this.rewardslots);
+	}
+	
+	public void displayitems() {
+		for(int i=0;i<categories.size();i++) {
+			categories.get(i).display();
+		}
+		System.out.println();
+	}
+	public void displaycategory() {
+		for(int i=0;i<categories.size();i++) {
+			System.out.println(i+1 + ")" + " " + categories.get(i).getcategory());
+		}
+	}
+	public void addoffer(int id, offer e) {
+		boolean ans = false;
+		for(int i=0;i<categories.size();i++) {
+			if(categories.get(i).addoffer(id, e)) {
+				ans = true;
+				break;
+			}
+		}
+		if(!ans) System.err.println("Enter a valid code");;
+	}
+	public item getitem(int id) {
+		for(int i=0;i<categories.size();i++) {
+			item k = categories.get(i).getitem(id);
+			if(k!=null) return k;
+		}
+		return null;
+	}
+	
+	
+}
+
+class customer implements member{
+	private String name;
+	private LinkedList<item> mycart;
+	private float mymoney;
+	private int reward;
+	private item[] recentorders;
+	private ArrayList<merchant> allmerchants;
+	private item latestitemselected;
+	private int latestquantity;
+	private int purchasenumber;
+	
+	public customer(String name, ArrayList<merchant> allmerchants) {
+		this.name = name;
+		mycart = new LinkedList<item>();
+		mymoney = 100;
+		reward = 0;
+		recentorders = new item[10];
+		this.allmerchants = allmerchants;
+		this.latestitemselected = null;
+		this.purchasenumber = 0;
+		this.latestquantity = 0;
+	}
+	
+
+	@Override
+	public void additem(String category, item e) {
+		/*
+		The customer has to choose a method of transaction: 1. a choice of buying an item, 2.
+		adding it to cart, 3. exiting the current option.
+		*/
+		if(category == "1") {
+			this.latestitemselected.
+		}
+		
+	}
+
+	@Override
+	public void search(int category) {
+		//category here is unique item id
+		boolean ans = false;
+		for(int i=0;i<allmerchants.size();i++) {
+			item k = allmerchants.get(i).getitem(category);
+			if(k!=null) {
+				this.latestitemselected = k;
+				ans = true;
+				break;
+			}
+		}
+		if(!ans) System.err.println("Enter a vaid ID");
+		
+	}
+
+	@Override
+	public void getreward() {
+				
+	}
+	public void displayallitems() {
+		for(int i=0;i<allmerchants.size();i++) {
+			allmerchants.get(i).displayitems();
+		}
+	}
+	public void setquantity(int k) {
+		this.latestquantity = k;
+	}
+	public void getlatestqun() {
+		return this.latestquantity;
+	}
+	
+}
+
+
+interface member{
+	public void additem(String category, item e);
+	public void search(int category);
+	public void getreward();
+}
+
+class category{
+	private String name;
+	private ArrayList<item> items;
+	private offer offer = null;
+	private int n_items;
+	
+	
+	public category(String name) {
+		this.name = name;
+		this.n_items = 0;
+		items = new ArrayList<item>();
+	}
+	public void additem(item e) {
+		items.add(e);
+		e.setcategory(this);
+		n_items++ ;
+	}
+	public String getcategory() {		
+		return this.name;
+	}
+	
+	
+	public boolean edititem(int code, float price, int quantity) {
+		boolean ans = false;
+		for(int i=0;i<items.size();i++) {
+			if(items.get(i).getid() == code) {
+				items.get(i).setprice(price);
+				items.get(i).setquantity(quantity);
+				ans = true;
+			}
+		}
+		return ans;
+	}
+	public void display() {
+		for(int i=0;i<items.size();i++) {
+			items.get(i).display();
+		}
+	}
+	public boolean addoffer(int id, offer e) {
+		boolean ans = false;
+		for(int i=0;i<items.size();i++) {
+			if(items.get(i).getid() == id) {
+				items.get(i).setoffer(e);
+				ans = true;
+			}
+		}
+		return ans;
+	}
+	public item getitem(int id) {
+		for(int i=0;i<items.size();i++) {
+			if(items.get(i).getid() == id) return items.get(i);
+			
+		}
+		
+		return null;
+	}
+	
+}
+
+class myitem extends item{
+	private int myquantity;
+	private boolean isbought;
+	private boolean isaddedtocart;
+	
+	public myitem(int id, String name, float price, int quantity) {
+		super(id, name, price, quantity);
+		// TODO Auto-generated constructor stub
+	}
+	public void setmyquantity(int myq) {
+		this.myquantity = myq;
+	}
+	public boolean isbought() {
+		return this.isbought;
+	}
+	public boolean isaddedtocart() {
+		return this.isaddedtocart;
+	}
+	public int getmyquantity() {
+		return this.myquantity;
+	}
+	public void setbought(boolean k) {
+		this.isbought = k;
+	}
+	public void setcart(boolean k) {
+		this.isaddedtocart = k;
+	}
+}

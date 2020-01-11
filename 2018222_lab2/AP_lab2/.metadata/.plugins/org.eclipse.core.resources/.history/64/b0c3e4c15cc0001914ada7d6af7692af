@@ -1,0 +1,55 @@
+package myproj;
+import java.util.*;
+public class mercury {
+public static void main(String[] args) {
+}
+}
+
+
+class item {
+	private int id;
+	private String name;
+	private float price;
+	private int quantity;
+	private String category;
+	
+	public item(int id, String name, float price, int quantity, String category) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		this.category = category;
+	}
+}
+
+class offer{
+	private boolean hasoffer;
+	private String offer = null;
+	public offer(int i) {
+		//if i = 1 then buy one get one 
+		//if i = 2 then 25% off
+		if(i == 1) {
+			offer = "Buy one get one free";
+			hasoffer = true;
+		}
+		if(i == 2) {
+			offer = "25% off";
+			hasoffer = true;
+		}
+		
+	}
+	
+	public boolean hasoffer() {
+		return this.hasoffer;
+	}
+	
+	public String getoffer() {
+		return this.offer;
+	}
+}
+
+class merchant{
+	private ArrayList<item> items;
+	private String name;
+	private ArrayList<offer> offers;
+}

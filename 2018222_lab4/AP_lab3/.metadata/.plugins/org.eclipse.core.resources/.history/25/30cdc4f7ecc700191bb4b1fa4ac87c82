@@ -1,0 +1,34 @@
+package archlegends;
+import java.util.LinkedList;
+public class game {
+	final private user thisuser;
+	private Hero currhero;
+	private monster currmonster;
+	public game(user newuser) {
+		this.thisuser = newuser;
+	}
+	public void sethero(Hero hero) {
+		this.currhero = hero;
+	}
+}
+
+class gamelayout{
+	final private int start = -1;
+	final LinkedList<>
+	
+}
+
+class node{
+	private int monsterlevel;
+	private int location;
+	public node(int monsterlevel, int location) {
+		this.monsterlevel = monsterlevel;
+		this.location = location;
+	}
+	public int getmonsterlevel() {
+		return this.monsterlevel;
+	}
+	public int getlocation() {
+		return this.location;
+	}
+}

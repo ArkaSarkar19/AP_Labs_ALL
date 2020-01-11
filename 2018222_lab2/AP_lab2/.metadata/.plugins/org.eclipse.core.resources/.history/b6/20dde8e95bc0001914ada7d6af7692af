@@ -1,0 +1,29 @@
+package myproj;
+import java.util.*;
+public class mercury {
+public static void main(String[] args) {
+}
+}
+
+
+class item {
+	private int id;
+	private String name;
+	private float price;
+	private int quantity;
+	private String category;
+	
+	public item(int id, String name, float price, int quantity, String category) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		this.category = category;
+	}
+}
+
+class merchant{
+	private ArrayList<item> items;
+	private String name;
+	private 
+}

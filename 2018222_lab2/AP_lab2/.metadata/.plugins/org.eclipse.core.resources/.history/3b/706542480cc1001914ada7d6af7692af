@@ -1,0 +1,45 @@
+package myproj;
+
+import java.util.ArrayList;
+
+public class mercury {
+
+}
+
+interface member{
+	public void additem();
+	public void search(String category);
+	public void getreward();
+}
+
+class merchant implements member{
+	private int rewardslots;
+	private ArrayList<item> items;
+	private String name;
+	private ArrayList<offer> offers;
+	private ArrayList<String> categories;
+	
+	@Override
+	public void additem() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void search(String category) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getreward() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}
+
+class category{
+	private String name;
+	
+}

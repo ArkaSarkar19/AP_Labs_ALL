@@ -1,0 +1,55 @@
+package archlegends;
+import java.util.LinkedList;
+public class game {
+	final private user thisuser;
+	private Hero currhero ;
+	private monster currmonster;
+	public game(user newuser) {
+		this.thisuser = newuser;
+	}
+	public void sethero(Hero hero) {
+		this.currhero = hero;
+	}
+}
+
+class gamelayout{
+	final private int start = 0;
+	final private LinkedList<node> graph[] = new LinkedList[11];
+	public gamelayout() {
+		for(int i=0;i<11;i++) {
+			graph[i] = new LinkedList<node>();
+		}
+		
+		graph[start].add(new node(1,0));
+		graph[start].add(new node(2,3));
+		graph[start].add(new node(3,6));
+		
+		for(int i=1;i<8;i=i+3) {
+			graph[i].add(new node(1,1));
+			graph[i].add(new node(2,4));
+			graph[i].add(new node(3,7));
+		}
+		for(int i=1;i<8;i=i+3) {
+			graph[i].add(new node(1,1));
+			graph[i].add(new node(2,4));
+			graph[i].add(new node(3,7));
+		
+		}
+	}
+	
+}
+
+class node{
+	private int monsterlevel;
+	private int location;
+	public node(int monsterlevel, int location) {
+		this.monsterlevel = monsterlevel;
+		this.location = location;
+	}
+	public int getmonsterlevel() {
+		return this.monsterlevel;
+	}
+	public int getlocation() {
+		return this.location;
+	}
+}

@@ -1,0 +1,8 @@
+package archlegends;
+
+public class game {
+	final private user thisuser;
+	private Hero currhero;
+	private monster currmonster;
+	
+}

@@ -1,0 +1,192 @@
+package archlegends;
+
+public class Hero {
+	protected int maxHP;
+	protected double HP;
+	protected int XP;	
+	protected int attack;
+	protected int defense;
+	protected int moves;
+	protected int specialmove;
+	protected boolean hasspecialpower;
+	protected int level;
+	
+	public Hero(int attack,int defense) {
+		this.HP = this.maxHP = 100;
+		this.XP = 0;
+		this.attack = attack;
+		this.defense = defense;
+		moves=0;
+		specialmove = Integer.MAX_VALUE;
+		hasspecialpower = false;
+		level = 1;
+	}
+	public int attack(monster monster) {
+		moves++;
+		this.checkspecialmove();
+		return this.attack;
+	}
+	public void defense(monster monster) {
+		moves++;
+		this.checkspecialmove();
+		if(monster.attack()==-1) this.lionfangattack();
+		else this.HP-=monster.attack() + this.defense;
+		
+		
+	}
+	protected void levelup() {
+		if(XP>=120) {
+			this.attack+=1;
+			this.defense+=1;
+			this.maxHP = 250;
+			level = 4;
+		}
+		else if(XP>=60) {
+			this.attack+=1;
+			this.defense+=1;
+			this.maxHP = 200;
+			level = 3;
+		}
+		else if(XP>=20) {
+			this.attack+=1;
+			this.defense+=1;
+			level = 2;
+		}
+		else {}
+
+	}
+	public void attacked(int attackvalue) {
+		this.HP-=attackvalue;
+	}
+	protected boolean checkspecialmove() {
+		return (this.moves - this.specialmove) >2;
+	}
+	protected void lionfangattack() {
+		this.HP = 0.5*this.HP;
+	}
+	protected void killedmonster(monster monster) {
+		this.XP  += monster.getlevel()*20;
+		this.HP = this.maxHP;
+		this.levelup();
+	}
+	protected int getlevel() {
+		return this.level;
+	}
+	public boolean hasspecialmove() {
+		return this.checkspecialmove();
+	}
+	public int getattackvalues() {
+		return this.attack;
+	}
+	public double gethp() {
+		return this.HP;
+	}
+	public int getmaxhp() {
+		return this.maxHP;
+	}
+	public boolean isdead() {
+		return this.HP<=0;>
+	}
+}
+
+final class Warrior extends Hero{
+	final private int specialpower = 5;
+	public Warrior() {
+		super(10,3);
+	}
+	
+	@Override
+	public int attack(monster monster) {
+		int ans = (this.hasspecialpower)? this.attack+specialpower : this.attack;
+		this.moves++;
+		this.checkspecialmove();
+		return ans;
+	}
+	
+	@Override
+	public void defense(monster monster) {
+		HP-= monster.attack() + ((this.hasspecialpower)? defense+specialpower : defense);
+		this.moves++;
+		this.checkspecialmove();
+		
+	}
+	
+	public void specialmove() {
+		this.hasspecialpower = true;
+		this.specialmove = this.moves;
+	}
+	public String gettype() {
+		return "Warrior";
+	}
+}
+
+
+final class Mage extends Hero{
+
+	public Mage() {
+		super(5, 5);
+	}
+	public void specialmove(monster monster) {
+		this.hasspecialpower = false;
+		this.specialmove = this.moves;
+		monster.specialmove(this);
+
+	}
+	public String gettype() {
+		return "Mage";
+	}
+	
+}
+
+final class Thief extends Hero{
+
+	public Thief() {
+		super(6, 4);
+	}
+	
+	public void specialmove(monster monster) {
+		this.hasspecialpower = false;
+		this.specialmove = this.moves;
+		this.HP+=monster.getHP()*0.3;
+		monster.specialmove(this);
+
+	}
+	public String gettype() {
+		return "Thief";
+	}
+	
+}
+
+final class Healer extends Hero{
+
+	public Healer() {
+		super(4, 8);
+	}
+	
+	public void specialmove(monster monster) {
+		this.hasspecialpower = false;
+		this.specialmove = this.moves;
+		monster.specialmove(this);
+	}
+	
+	private void heal() {
+		if(this.moves <= this.specialmove+3) {
+			this.HP = 1.05*this.HP;
+		}
+		else specialmove=Integer.MAX_VALUE;
+	}
+	@Override
+	public int attack(monster monster) {
+		this.heal();
+		return super.attack(monster);
+
+	}
+	@Override
+	public void defense(monster monster) {
+		super.defense(monster);
+		this.heal();
+	}
+	public String gettype() {
+		return "Healer";
+	}
+}

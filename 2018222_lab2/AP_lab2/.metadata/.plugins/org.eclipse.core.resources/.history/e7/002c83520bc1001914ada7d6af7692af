@@ -1,0 +1,132 @@
+package myproj;
+import java.util.*;
+public class mercury1 {
+	public static ArrayList<merchant> merchants = new ArrayList<merchant>();
+
+	public static void main(String[] args) {
+	Scanner stdin = new Scanner(System.in);
+	String k = stdin.next();
+	
+	
+}
+}
+
+
+class item {
+	private int id;
+	private String name;
+	private float price;
+	private int quantity;
+	private String category;
+	private offer offer = null ;
+	
+	public item(int id, String name, float price, int quantity, String category) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		this.category = category;
+	}
+	
+	public void setoffer(offer e) {
+		offer = e;
+	}
+	
+	public void display() {
+		System.out.println(id + " " + name + " " + price + " " + quantity + " ");
+		if(offer !=null) System.out.print(offer.getoffer() + " ");
+		System.out.print(category);
+	}
+	public int getid() {
+		return id;
+	}
+	public float getprice() {
+		return price;
+	}
+	public int getquantity() {
+		return quantity;
+	}
+	public String getcategory() {
+		return category;
+	}
+	public String getoffer() {
+		if(offer == null) return null;
+		else return offer.getoffer();
+	}
+	public void setprice(float price) {
+		this.price = price;
+	}
+	public void setquantity(int quantity) {
+		this.quantity = quantity;
+	}
+}
+
+class offer{
+	private boolean hasoffer;
+	private String offer = null;
+	public offer(int i) {
+		//if i = 1 then buy one get one 
+		//if i = 2 then 25% off
+		if(i == 1) {
+			offer = "Buy one get one free";
+			hasoffer = true;
+		}
+		if(i == 2) {
+			offer = "25% off";
+			hasoffer = true;
+		}
+		
+	}
+	
+	public boolean hasoffer() {
+		return this.hasoffer;
+	}
+	
+	public String getoffer() {
+		return this.offer;
+	}
+	
+}
+
+class merchant{
+	private int rewardslots;
+	private ArrayList<item> items;
+	private String name;
+	private ArrayList<offer> offers;
+	private ArrayList<String> categories;
+	
+	public merchant(String name) {
+		this.name = name;
+	}
+	
+	public String getname() {
+		return this.name;
+	}
+	
+	public void additem(item item) {
+		items.add(item);
+		item.display();
+	}
+	
+	public void edititem(int code, float price, int quantity) {
+		boolean ans = false;
+		for(int i=0;i<items.size();i++) {
+			if(items.get(i).getid() == code) {
+				items.get(i).setprice(price);
+				items.get(i).setquantity(quantity);
+				ans = true;
+			}
+		}
+		if(!ans) System.err.println("Enter a valid code");;
+	}
+
+	
+	public void displaycategories() {
+		
+	}
+	
+	
+}
+
+
+

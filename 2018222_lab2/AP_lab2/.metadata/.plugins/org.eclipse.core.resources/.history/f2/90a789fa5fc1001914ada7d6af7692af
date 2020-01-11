@@ -1,0 +1,717 @@
+package myproj;
+import java.util.*;
+public class mercury {
+	public static ArrayList<merchant> allmerchants = new ArrayList<merchant>();
+	public static ArrayList<customer> allcustomers = new ArrayList<customer>();
+	public static ArrayList<member> allmembers = new ArrayList<member>();
+	public static int id = 1;
+	public static ArrayList<super_category> allitems = new ArrayList<super_category>();
+	public static void main(String[] args) {
+	Scanner stdin = new Scanner(System.in);
+
+	member jack = new merchant("jack", allmembers, allitems);
+	member john = new merchant("john", allmembers, allitems);
+	member james =new merchant("james", allmembers, allitems);
+	member jeff = new merchant("jeff", allmembers, allitems);
+	member joseph = new merchant("joseph", allmembers, allitems);
+	allmembers.add(jack);
+	allmembers.add(john);
+	allmembers.add(james);
+	allmembers.add(jeff);
+	allmembers.add(joseph);
+
+	member ali = new customer("ali",allmembers, allitems);
+	member nobby = new customer("nobby",allmembers, allitems);
+	member bruno = new customer("bruno",allmembers, allitems);
+	member borat = new customer("borat",allmembers, allitems);
+	member aladeen = new customer("aladeen",allmembers, allitems);
+	allmembers.add(ali);
+	allmembers.add(nobby);
+	allmembers.add(bruno);
+	allmembers.add(borat);
+	allmembers.add(aladeen);
+	
+	while(true) {
+	
+	
+	
+	
+	
+	while(true) {
+		System.out.println("Welcome to Mercury");
+		System.out.println("1) Enter as Merchant");
+		System.out.println("2) Enter as Customer");
+		System.out.println("3) See user details");
+		System.out.println("4) Company account balance");
+		System.out.println("5) Exit");
+		
+		int query = stdin.nextInt();
+		if(query == 5) break;
+		switch(query) {
+		case 1:
+			System.out.println("Choose Merchant");
+			for(int i=0;i<allmembers.size();i++) {
+				if(allmembers.get(i) instanceof merchant) {
+					merchant m = (merchant)allmembers.get(i);
+					System.out.println(i + 1 + " " + m.getname());
+				}
+				
+			}
+			int m = stdin.nextInt();
+			
+			while(true) {
+				merchant mer = (merchant)allmembers.get(m-1);
+				System.out.println("Welcome " + mer.getname());
+				System.out.println("Merchant Menu");
+				System.out.println("1) Add item");
+				System.out.println("2) Edit item");
+				System.out.println("3) Search by category");
+				System.out.println("4) Add offer");
+				System.out.println("5) Rewards won");
+				System.out.println("6) Exit");
+				
+				int q = stdin.nextInt();
+				if(q==6) break;
+				switch(q) {
+				case 1:
+					System.out.println("Enter Item Details");
+					System.out.println("Item Name:");
+					String name = stdin.next();
+					System.out.println("Item Price: ");
+					float price = stdin.nextFloat();
+					System.out.println("Item Quantity: ");
+					int quantity = stdin.nextInt();
+					System.out.println("Item Category: ");
+					String category = stdin.next();
+					item e = new item(id, name,price,quantity);
+					mer.additem(category, e);
+					
+					id++;
+					e.display();
+					break;
+				case 2:
+					System.out.println("Choose item by code ");
+					mer.displayitems();
+					int code_edit = stdin.nextInt();
+					System.out.println("Enter edit details");
+					System.out.println("Item price: ");
+					float price_edit = stdin.nextInt();
+					System.out.println("Item quantity: ");
+					int quantity_edit = stdin.nextInt();
+					mer.edititem(code_edit, price_edit, quantity_edit);
+					break;
+				case 3:
+					System.out.println("Choose a category");
+					for(int i=0;i<allitems.size();i++) {
+						System.out.println(i+1 + " " + allitems.get(i).getcategory());
+					}
+					int index_c = stdin.nextInt();
+					allitems.get(index_c-1).display();
+					break;				
+					
+				case 4:
+					System.out.println("Choose item by code");
+					mer.displayitems();
+					int offer_id = stdin.nextInt();
+					item toadd = mer.getitem(offer_id);
+					if(toadd.getquantity()<2) {
+						System.out.println("Choose offer");
+						System.out.println("1) 25% off");
+						int offer_in = stdin.nextInt();
+						offer newoffer;
+						if(offer_in==1) {
+							newoffer = new offer(2);
+							toadd.setoffer(newoffer);
+							toadd.display();
+						}
+						else System.err.println("Enter a valid offer");
+					}
+					else {
+					System.out.println("Choose offer");
+					System.out.println("1) buy one get one");
+					System.out.println("2) 25% off");
+					int offer_in = stdin.nextInt();
+					offer newoffer;
+					if(offer_in<=2) {
+						newoffer = new offer(offer_in);
+						toadd.setoffer(newoffer);
+						toadd.display();
+						
+					}
+					else System.err.println("Enter a valid offer");
+					}
+					break;
+				case 5:
+					System.out.print("Total rewards " + mer.getreward());
+					break;
+				}
+			}
+			break;
+			
+		case 2:
+			System.out.println("Choose Customer");
+			for(int i=0;i<allmembers.size();i++) {
+				if(allmembers.get(i) instanceof customer) {
+					customer c = (customer)allmembers.get(i);
+					System.out.println(i - 4 + " " + c.getname());
+				}
+				
+			}
+			int c = stdin.nextInt();
+			customer cus = (customer)allmembers.get(c+4);
+			System.out.println("Welcome " + cus.getname());
+			System.out.println("Customer Menu");
+			System.out.println("1) Search item");
+			System.out.println("2) Checkout cart");
+			System.out.println("3) Reward won");
+			System.out.println("4) print latest orders");
+			System.out.println("5) Exit");
+			int q_2 = stdin.nextInt();
+			while(q_2!=5) {
+				switch(q_2) {
+				case 1:
+					System.out.println("Choose a category");
+					for(int i=0;i<allitems.size();i++) {
+						System.out.println(i+1 + " " + allitems.get(i).getcategory());
+					}
+					int s_c = stdin.nextInt();
+					System.out.println("Choose item my code");
+					allitems.get(s_c-1).display();
+					System.out.println("Enter item code");
+					int code_2  = stdin.nextInt();
+					System.out.println("Enter item quantity");
+					int quan_2 = stdin.nextInt();
+					merchant mer_2 = allitems.get(s_c-1).getmerchant(code_2);
+					cus.setquantity(quan_2);
+					item ite_2 = mer_2.getitem(code_2);
+					cus.setlatestitem(ite_2);
+					System.out.println("Choose method of transaction");
+					System.out.println("1) Buy item");
+					System.out.println("2) Add item to cart");
+					System.out.println("3) Exit");
+					int in_2 = stdin.nextInt();
+					cus.additem(Integer.toString(in_2), ite_2);
+				
+				case 2:
+					cus.checkoutcart();
+				case 3:
+					System.out.println(cus.getreward());
+				case 4:
+					cus.displayrecents();
+					
+				}
+			}
+		}
+
+	}
+	break;
+	}
+}
+}
+
+class super_category{
+	private String category;
+	private ArrayList<item> items = new ArrayList<item>();
+	
+	
+	public String getcategory() {
+		return this.category;
+	}
+	public void additem(item e) {
+		 items.add(e);
+	}
+	public void setcategory(String c) {
+		this.category = c;
+	}
+	public void display() {
+		System.out.println();
+		for(int i=0;i<items.size();i++) {
+			System.out.print(items.get(i).getid() + " " + items.get(i).getname() + " " + items.get(i).getprice() + " " + items.get(i).getquantity() + " ");
+			if(items.get(i).hasoffer()) System.out.print(items.get(i).getoffer() + " ");
+			System.out.print(category + " from merchant " + items.get(i).getmerchant().getname());
+			}
+		System.out.println();
+	}
+	public merchant getmerchant(int code) {
+		for(int i=0;i<items.size();i++) {
+			if(items.get(i).getid() == code) return items.get(i).getmerchant();
+				
+		}
+		return null;
+	}
+}
+
+class item {
+	private int id;
+	private String name;
+	private float price;
+	private int quantity;
+	private category category;
+	private offer offer = null ;
+	private boolean hasoffer = false;
+	private merchant mymerchant = null;
+
+	public item(int id, String name, float price, int quantity) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		
+	}
+			
+	public void display() {
+		System.out.print(id + " " + name + " " + price + " " + quantity + " ");
+		if(offer !=null) System.out.print(offer.getoffer() + " ");
+		else System.out.print("None ");
+		System.out.print(category.getcategory().getname());
+		System.out.println();
+	}
+	public int getid() {
+		return id;
+	}
+	public float getprice() {
+		return price;
+	}
+	public int getquantity() {
+		return quantity;
+	}
+	public String getcategory() {
+		return category.getname();
+	}
+	public String getoffer() {
+		if(offer == null) return null;
+		else return offer.getoffer();
+	}
+	public void setprice(float price) {
+		this.price = price;
+	}
+	public void setquantity(int quantity) {
+		this.quantity = quantity;
+	}
+	public void setcategory(category c) {
+		this.category = c;
+	}
+	public void setoffer(offer e) {
+		offer = e;
+		hasoffer = true;
+	}
+	public boolean hasoffer() {
+		return this.hasoffer;
+	}
+	public merchant getmerchant() {
+		return mymerchant;
+	}
+	public void setmerchant(merchant c) {
+		this.mymerchant = c;
+	}
+	public String getname() {
+		return this.name;
+	}
+}
+
+class offer{
+	private boolean hasoffer;
+	private String offer = null;
+	public offer(int i) {
+		//if i = 1 then buy one get one 
+		//if i = 2 then 25% off
+		if(i == 1) {
+			offer = "Buy one get one free";
+			hasoffer = true;
+		}
+		if(i == 2) {
+			offer = "25% off";
+			hasoffer = true;
+		}
+		
+	}
+	
+	public boolean hasoffer() {
+		return this.hasoffer;
+	}
+	
+	public String getoffer() {
+		return this.offer;
+	}
+	
+}
+
+class merchant implements member{
+	private int rewardslots = 0;
+	private String name;
+	private ArrayList<category> categories;
+	private double money;
+	private ArrayList<member> allmembers;
+	private ArrayList<super_category> allitems;
+	
+	public merchant(String name, ArrayList<member> allmembers, ArrayList<super_category> allitems ) {
+		this.name = name;
+		categories = new ArrayList<category>();
+		this.money = 0;
+		this.allmembers = allmembers;
+		this.allitems = allitems;
+	}
+	
+	public String getname() {
+		return this.name;
+	}
+	
+	private void add(String usr_category, item e) {
+		boolean newcategory = true;
+		for(int i=0;i<categories.size();i++) {
+			if(categories.get(i).getcategory().equals(usr_category)) {
+				categories.get(i).additem(e);
+				for(int j=0;j<allitems.size();j++) {
+					if(allitems.get(j).getcategory().equals(usr_category)) {
+						allitems.get(j).additem(e);
+					}
+				}
+				newcategory = false;
+				break;
+			}
+		}
+		if(newcategory) {
+			category addcategory = new category(usr_category);
+			addcategory.additem(e);
+			categories.add(addcategory);
+			super_category s_c = new super_category();
+			s_c.additem(e);
+			s_c.setcategory(usr_category);
+			allitems.add(s_c);
+
+		}
+		
+	}
+	private void seachindex(int index) {
+		categories.get(index).display();
+	}
+	
+	public void edititem(int code, float price, int quantity) {
+		boolean ans = false;
+		for(int i=0;i<categories.size();i++) {
+			if(categories.get(i).edititem(code, price, quantity)) {
+				ans = true;
+				break;
+			}
+		}
+		if(!ans) System.err.println("Enter a valid code");;
+	}
+
+	
+	
+	@Override
+	public void additem(String category, item e) {
+		e.setmerchant(this);
+		this.add(category,e);
+		
+	}
+
+	@Override
+	public void search(int category) {
+		this.seachindex(category - 1);
+	}
+
+	@Override
+	public float getreward() {
+		System.out.println();
+		return (this.rewardslots);
+		
+	}
+	
+	public void displayitems() {
+		System.out.println();
+		for(int i=0;i<categories.size();i++) {
+			categories.get(i).display();
+		}
+		System.out.println();
+	}
+	public void displayitems(int category) {
+		categories.get(category).display();
+	}
+	public void displaycategory() {
+		for(int i=0;i<categories.size();i++) {
+			System.out.println(i+1 + ")" + " " + categories.get(i).getcategory());
+		}
+	}
+	public void addoffer(int id, offer e) {
+		boolean ans = false;
+		for(int i=0;i<categories.size();i++) {
+			if(categories.get(i).addoffer(id, e)) {
+				ans = true;
+				break;
+			}
+		}
+		if(!ans) System.err.println("Enter a valid code");;
+	}
+	public item getitem(int id) {
+		for(int i=0;i<categories.size();i++) {
+			item k = categories.get(i).getitem(id);
+			if(k!=null) return k;
+		}
+		return null;
+	}
+	public void addmoney(double newmoney) {
+		this.money += newmoney;
+	}
+	public double getmoney() {
+		return money;
+	}
+	
+	
+}
+
+class customer implements member{
+	private String name;
+	private LinkedList<myitem> mycart;
+	private double mymoney;
+	private int reward;
+	private myitem[] recentorders;
+	private ArrayList<member> allmembers;
+	private ArrayList<super_category> allitems;
+	private item latestitemselected;
+	private int latestquantity;
+	private int purchasenumber;
+	
+	public customer(String name, ArrayList<member> allmembers, ArrayList<super_category> allitems) {
+		this.name = name;
+		mycart = new LinkedList<myitem>();
+		mymoney = 100;
+		reward = 0;
+		recentorders = new myitem[10];
+		this.allmembers = allmembers;
+		this.allitems = allitems;
+		this.latestitemselected = null;
+		this.purchasenumber = 0;
+		this.latestquantity = 0;
+	}
+	
+
+	@Override
+	public void additem(String category, item e) {
+		/*
+		The customer has to choose a method of transaction: 1. a choice of buying an item, 2.
+		adding it to cart, 3. exiting the current option.
+		*/
+		myitem add = new myitem(e,latestquantity);
+		if(category == "1") {
+		
+			int redquan = this.latestitemselected.getquantity() - this.latestquantity;
+			if(mymoney - this.latestitemselected.getprice()*1.005< 0) { System.err.println("Out of money");
+			}			
+			else {
+				this.latestitemselected.setquantity(redquan);
+				this.addtorecents(add);
+				this.purchasenumber++;
+				if(this.purchasenumber%5==0) reward+=10;
+				mymoney =  (mymoney + reward- this.latestitemselected.getprice()*1.005);
+				reward = 0;
+				add.getparent().getmerchant().addmoney(add.getparent().getprice());
+				
+				System.out.println("Item successfully bought");
+			}
+		}
+		
+		if(category == "2") {	
+			mycart.addLast(add);
+			System.out.println("Item successfully added to cart");
+		}
+		if(category == "3") {
+			add = null;
+			System.out.println("Successfully exited");
+		}
+		
+		
+	}
+
+	@Override
+	public void search(int category) {
+		//category here is unique item id
+		boolean ans = false;
+		for(int i=0;i<allmembers.size();i++) {
+			
+			if(allmembers.get(i) instanceof merchant) {
+				merchant mer = (merchant)allmembers.get(i);
+				item k = mer.getitem(category);
+				if(k!=null) {
+					this.latestitemselected = k;
+					ans = true;
+					break;
+				}
+		
+				if(!ans) System.err.println("Enter a vaid ID");
+			}
+		}
+		
+	}
+
+	@Override
+	public float getreward() {
+		System.out.println();
+		return (this.reward);
+	}
+	public void displayallitems() {
+		for(int i=0;i<allmembers.size();i++) {
+	
+		if(allmembers.get(i) instanceof merchant) {
+			merchant mer = (merchant)allmembers.get(i);
+			mer.displayitems();
+			}
+		}
+	}
+	public void setquantity(int k) {
+		this.latestquantity = k;
+	}
+	public int getlatestqun() {
+		return this.latestquantity;
+	}
+	public void setlatestitem(item e) {
+		this.latestitemselected = e;
+	}
+	private void addtorecents(myitem e) {
+		int i;
+		for( i=0;i<10;i++) {
+			if(recentorders[i] == null) {
+				recentorders[i] = e;
+				break;
+			}
+		}
+		if(i==9) {
+			for(int j=1;j<10;j++) {
+				recentorders[j-1] = recentorders[j]; 
+			}
+			recentorders[9] = e;
+		}
+	}
+	public void	checkoutcart() {
+		if(mycart.size()==0) System.err.println("Cart is empty");
+		else {
+		
+		while(mycart.size()!=0) {
+			myitem curr = mycart.getFirst();
+			if(curr==null) break;
+			else {
+				if(curr.getparent().getquantity() < curr.getmyquantity()) {
+					System.err.println("Out of Stock");
+					break;
+				}
+				if(mymoney < curr.getparent().getprice()) {
+					System.err.println("Out of Money");
+					break;
+				}
+				else {
+					mymoney = mymoney + reward - curr.getparent().getprice();
+					this.addtorecents(curr);
+					mycart.removeFirst();
+					this.purchasenumber++;
+					if(this.purchasenumber%5==0) reward+=10;
+					System.out.println(curr.getmyquantity() + "  " + curr.getparent().getname() + " successfully bought");
+				}
+			}
+		}
+	}
+	}
+	public void displayrecents() {
+		for(int i=0;i<10;i++) {
+			myitem k = recentorders[i];
+			if(k==null) break;
+			System.out.println("Bought Item ");
+			System.out.print(k.getparent().getname() + " quantity: " + k.getmyquantity() + "for Rs" + k.getparent().getprice()*k.getmyquantity() + "from Merchant" + k.getparent().getmerchant().getname());
+			
+		}
+	}
+	public String getname() {
+		return this.name;
+	}
+	
+	
+}
+
+
+interface member{
+	public void additem(String category, item e);
+	public void search(int category);
+	public float getreward();
+}
+
+class category{
+	private String name;
+	private ArrayList<item> items;
+	private offer offer = null;
+	private int n_items;
+	
+	
+	public category(String name) {
+		this.name = name;
+		this.n_items = 0;
+		items = new ArrayList<item>();
+	}
+	public void additem(item e) {
+		items.add(e);
+		e.setcategory(this);
+		n_items++ ;
+	}
+	public category getcategory() {		
+		return this;
+	}
+	public String getname() {
+		return this.name;
+	}
+	
+	public boolean edititem(int code, float price, int quantity) {
+		boolean ans = false;
+		for(int i=0;i<items.size();i++) {
+			if(items.get(i).getid() == code) {
+				items.get(i).setprice(price);
+				items.get(i).setquantity(quantity);
+				ans = true;
+				items.get(i).display();
+			}
+		}
+		return ans;
+	}
+	public void display() {
+		for(int i=0;i<items.size();i++) {
+			items.get(i).display();
+		}
+	}
+	public boolean addoffer(int id, offer e) {
+		boolean ans = false;
+		for(int i=0;i<items.size();i++) {
+			if(items.get(i).getid() == id) {
+				items.get(i).setoffer(e);
+				ans = true;
+			}
+		}
+		return ans;
+	}
+	public item getitem(int id) {
+		for(int i=0;i<items.size();i++) {
+			if(items.get(i).getid() == id) return items.get(i);
+			
+		}
+		
+		return null;
+	}
+	
+}
+
+class myitem {
+	private int myquantity;
+	private item parentitem;
+	
+	public myitem(item e, int quantity) {
+		this.parentitem = e;
+		this.myquantity = quantity;
+	}
+	public void setmyquantity(int myq) {
+		this.myquantity = myq;
+	}
+	public int getmyquantity() {
+		return this.myquantity;
+	}
+	public item getparent() {
+		return this.parentitem;
+	}
+	
+}
+

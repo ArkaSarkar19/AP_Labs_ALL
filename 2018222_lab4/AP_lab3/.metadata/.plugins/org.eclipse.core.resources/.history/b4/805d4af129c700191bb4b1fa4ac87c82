@@ -1,0 +1,82 @@
+package archlegends;
+public interface hero {
+	public int attack();
+	public int defense();
+	public void specialmove();
+	public void levelup();
+}
+
+final class Warrior implements hero{
+	private int attack = 10;
+	private int defense = 3;
+	private boolean hasspecialpower = false;
+	private int moves = 0;
+	private int specialmove = 0;
+	final private int specialpower = 5;
+	@Override
+	public int attack() {
+		int ans = (this.hasspecialpower)? this.attack+specialpower : this.attack;
+		this.moves++;
+		this.checkspecialmove();
+		return ans;
+	}
+
+	@Override
+	public int defense() {
+		int ans = (this.hasspecialpower)? this.defense+specialpower : this.defense;
+		this.moves++;
+		this.checkspecialmove();
+		return ans;
+		}
+
+	@Override
+	public void specialmove() {
+		this.hasspecialpower = true;
+		this.specialmove = this.moves;
+	}
+	
+	private boolean checkspecialmove() {
+		return (this.moves - this.specialmove) >2;
+	}
+	
+	@Override
+	public void levelup() {
+		this.attack+=1;
+		this.defense+=1;
+	}
+}
+
+final class Mage implements hero{
+	private int attack = 5;
+	private int defense = 5;
+	private boolean hasspecialpower = false;
+	private int moves = 0;
+	private int specialmove = 0;
+	final private int specialpower = 5;
+	
+	@Override
+	public int attack() {
+		return attack;
+	}
+
+	@Override
+	public int defense() {
+		return defense;
+	}
+
+	@Override
+	public void specialmove() {
+		this.hasspecialpower = true;
+		this.specialmove = this.moves;
+	}
+	private boolean checkspecialmove() {
+		return (this.moves - this.specialmove) >2;
+	}
+
+	@Override
+	public void levelup() {
+		this.attack+=1;
+		this.defense+=1;
+	}
+	
+}

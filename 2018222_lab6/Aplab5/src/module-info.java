@@ -1,0 +1,2 @@
+module Aplab5 {
+}

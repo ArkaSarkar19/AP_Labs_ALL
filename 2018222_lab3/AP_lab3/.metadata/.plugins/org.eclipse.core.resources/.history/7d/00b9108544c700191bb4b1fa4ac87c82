@@ -1,0 +1,29 @@
+package archlegends;
+import java.math.*;
+import java.util.Random;
+public class monster {
+	private double HP;
+	final private int level;
+	
+	public monster(int level, int HP) {
+		this.level = level;
+		this.HP = HP;
+	}
+	public int attack() {
+		int n =  (int) ((HP+1)/2);
+		double mean = (n+1)/2;
+		double sd =  Math.sqrt((n*n -1)/12);
+        Random r = new Random(); 
+        return Math.abs((int) (r.nextGaussian() * sd + mean));
+
+	}
+}
+
+class goblins extends monster{
+
+	public goblins() {
+		super(1, 100);
+	}
+	
+	
+}

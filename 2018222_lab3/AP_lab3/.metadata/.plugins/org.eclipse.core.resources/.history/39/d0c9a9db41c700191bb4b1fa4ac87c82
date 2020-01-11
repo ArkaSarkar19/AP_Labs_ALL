@@ -1,0 +1,11 @@
+package archlegends;
+
+public class monster {
+	private double HP;
+	final private int level;
+	
+	public monster(int level, int HP) {
+		this.level = level;
+		this.HP = HP;
+	}
+}

@@ -1,0 +1,4 @@
+package archlegends;
+public interface warrior {
+
+}

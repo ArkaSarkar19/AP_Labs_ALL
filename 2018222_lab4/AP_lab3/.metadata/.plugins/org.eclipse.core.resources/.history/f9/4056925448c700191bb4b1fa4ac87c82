@@ -1,0 +1,49 @@
+package archlegends;
+import java.math.*;
+import java.util.Random;
+public class monster {
+	protected double HP;
+	final protected int level;
+	protected int moves = 0;
+	protected int specialmove = Integer.MAX_VALUE;
+	protected boolean specialmage = false;
+	protected boolean special
+	public monster(int level, int HP) {
+		this.level = level;
+		this.HP = HP;
+	}
+	public int attack() {
+		int n =  (int) ((HP+1)/2);
+		double mean = (n+1)/2;
+		double sd =  Math.sqrt((n*n -1)/12);
+        Random r = new Random();
+        moves++;
+        return Math.abs((int) (r.nextGaussian() * sd + mean));
+
+	}
+	public int getlevel() {
+		return this.level;
+	}
+	public void specialmove(Hero hero) {
+		if(hero instanceof Mage) {
+			specialmove = moves;
+			
+		}
+	}
+	private void magespecial() {
+		
+	}
+	
+}
+
+class goblins extends monster{
+
+	public goblins() {
+		super(1, 100);
+	}
+	
+	public boolean isdead() {
+		return this.HP<0;
+	}
+	
+}

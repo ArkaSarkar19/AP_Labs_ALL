@@ -1,0 +1,13 @@
+package archlegends;
+
+public class game {
+	final private user thisuser;
+	private Hero currhero;
+	private monster currmonster;
+	public game(user newuser) {
+		this.thisuser = newuser;
+	}
+	public void sethero(Hero hero) {
+		this.currhero = hero;
+	}
+}

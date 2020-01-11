@@ -1,0 +1,451 @@
+package campus_placement;
+import java.util.*;
+
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
+
+public class main {
+	public static String[] c_main = {"CSE", "CSAM", "ECE", "CSD", "CSSS", "CSB"};
+	public static Set<String> allcourses_main = new HashSet<String>(Arrays.asList(c_main));
+	public static ArrayList<mystudent> allstudents = new ArrayList<mystudent>();
+	public static ArrayList<company> allcompanies = new ArrayList<company>(); 
+	public static int n_students;
+	
+	public static void selectstudents(company com, ArrayList<company> allcom, ArrayList<mystudent> allstu) {
+		int i1 = allcom.indexOf(com);
+		company k  = allcom.get(i1);
+		ArrayList<scores> sco = k.technicalscore;
+		int n = k.getrequiredstudents();
+		mystudent max1 = null;
+		mystudent max2 = null;
+		int s_m1 = 0;
+		int s_m2 = 0;
+		int j1 = 0;
+		int j2 = 0;
+		while(n!=0) {
+			
+			for(int j=0;j<sco.size();j++) {
+				if(!sco.get(j).s.getplacementstatus() && sco.get(j).score > s_m1 && sco.get(j).score > s_m2) {
+					if(max1==null) {
+						max1 = sco.get(j).s;
+						s_m1 = sco.get(j).score;
+						j1 = j;
+					}
+					else {
+						max2 = max1;
+						s_m2 = s_m1;
+						j2 = j1;
+						max1 = sco.get(j).s;
+						s_m1 = sco.get(j).score;
+						j1 = j;
+					}
+					
+				}
+				else if(!sco.get(j).s.getplacementstatus() && sco.get(j).score < s_m1 && sco.get(j).score > s_m2) {
+					s_m2 = sco.get(j).score;
+					max2 = sco.get(j).s;
+					j2 = j;
+				}
+				else;
+			}
+			
+			if(max1!=null && max2!=null) {
+				if(s_m1==s_m2) {
+					float c1 = max1.getcgpa();
+					float c2 = max2.getcgpa();
+					if(c1>c2) {
+						System.out.println(max1.getrollnumber());
+						sco.get(j1).s.setplacementstatus(true);
+						n--;
+					}
+					else {
+						System.out.println(max2.getrollnumber());
+						sco.get(j2).s.setplacementstatus(true);
+						n--;
+					}
+				}
+				else {
+					sco.get(j1).s.setplacementstatus(true);
+					n--;
+				}
+				max1 = null;
+				max2 = null;
+			}
+			else {
+				n = 0;
+				System.out.println(max1.getrollnumber());
+				sco.get(j1).s.setplacementstatus(true);
+				
+			}
+			
+		}
+		k.setapplicationstatus("CLOSED");
+		
+		
+		
+	}
+	public static void main(String[] args) {
+		Scanner stdin  = new Scanner(System.in);
+		n_students = stdin.nextInt();
+		
+		//checking for invalid input.
+		while(n_students<1) {
+			System.err.println("Enter a positive Integer greater than or equal to 1 ");
+			n_students = stdin.nextInt();
+		}
+		allstudents = new ArrayList<mystudent>(n_students);
+		for(int i=0;i<n_students;i++) {
+			float cgpa = stdin.nextFloat();
+			while(cgpa<0) {
+				System.err.println("Enter a valid CGPA");
+				cgpa = stdin.nextFloat();
+			}
+			String stream = stdin.next();
+			while(allcourses_main.contains(stream)== false) {
+				System.err.println("Invalid input, enter one of { CSE, CSAM, ECE, CSD, CSSS, CSB }");
+				stream = stdin.next();
+			}
+			allstudents.add(new mystudent(cgpa,stream,i+1));
+			
+		}
+		
+		System.out.println("--------------Students Registered-------------------");
+		
+		for(int i=0;i<allstudents.size();i++) {
+			allstudents.get(i).display();
+		}
+		
+		while(allstudents.size()!=0) {
+			int query = stdin.nextInt();
+			
+			//Add a company
+			if(query == 1) {
+				
+				String name = stdin.next();
+				System.out.println("Number of Eligible Courses = ");
+				int numbercourses = stdin.nextInt();
+				
+				//discard any invalid input
+				while(numbercourses<1 || numbercourses>6) {
+					System.err.println("Enter a positive Integer between 1 and 6 ");
+					numbercourses = stdin.nextInt();
+				}
+				
+				//all eligible courses are added to the set to discard any duplicates
+				Set<String> eligiblecourses = new HashSet<String>();
+				int i = 0;
+				while(i<numbercourses) {
+					String s = stdin.next();
+					if(allcourses_main.contains(s)) {
+						eligiblecourses.add(s);
+						i++;
+					}
+					else {
+						System.err.println("Invalid input, enter one of { CSE, CSAM, ECE, CSD, CSSS, CSB }");
+					}
+				}
+				
+				ArrayList<mystudent> students = new ArrayList<mystudent>();
+				System.out.print("Number of Students Required = ");
+				int numberofstudentsreq = stdin.nextInt();
+				
+				//students required should be valid 
+				
+				while(numberofstudentsreq<1 || numberofstudentsreq > allstudents.size()) {
+					System.err.println("Invalid input " + "only " + allstudents.size() + " students are to be placed. Enter a valid input. " );
+					numberofstudentsreq = stdin.nextInt();
+				}
+				for(int j=0;j<allstudents.size();j++) {
+					//student who aren't placed and have the eligible stream is selected
+					if(!allstudents.get(j).getplacementstatus() && eligiblecourses.contains(allstudents.get(j).getstream())) {
+						students.add(allstudents.get(j));
+						
+					}
+				}
+				System.out.println(name);
+				System.out.println("Course Criteria");
+				Iterator<String> iterator = eligiblecourses.iterator();
+				while(iterator.hasNext()){
+				  System.out.println(iterator.next());
+				}
+				System.out.println("Number of Required Students = " + numberofstudentsreq);
+				System.out.println("Application Status = OPEN");
+				
+				company c = new company(name, eligiblecourses, numberofstudentsreq, numbercourses);
+				c.students = students;
+				scores stu = null;
+				//Input scores of technical round
+				System.out.println("Enter Scores of Technical Round");
+				for(int j=0;j<c.students.size();j++) {
+					System.out.println("Enter score for Roll No : " + students.get(j).getrollnumber());
+					int score = stdin.nextInt();
+					stu = new scores(c,c.students.get(j));
+
+					stu.score = score;
+					students.get(j).technicalscore.add(stu);
+					
+				}
+				
+				allcompanies.add(c);
+				for(int j=0;j<c.students.size();j++) {
+					students.get(j).addcompany(c);
+					
+				}
+				for(int j=0;j<allcompanies.size();j++) {
+					if(allcompanies.get(j).getname().equals(name)) {
+						allcompanies.get(j).technicalscore.add(stu);
+					}
+				}
+				
+				
+			}
+			
+			//remove account of placed students
+			if(query == 2) {
+				
+				int j = 0;
+				int len = allstudents.size();
+				System.out.println("Accounts removed for ");
+				while(j < len) {
+					if(allstudents.get(j).getplacementstatus()) {
+						System.out.println(allstudents.get(j).getrollnumber());
+						allstudents.remove(j);
+						len--;
+					}
+					else j++;
+				}
+			}
+			
+			//remove accounts of companies whose applications are closed.
+			if(query == 3) {
+				
+				int j = 0;
+				int len = allcompanies.size();
+				System.out.println("Accounts removed for ");
+
+				while(j < len) {
+					if(allcompanies.get(j).getapplicationstatus() == "CLOSED") {
+						System.out.println(allcompanies.get(j).getname());
+						allcompanies.remove(j);
+						len--;
+					}
+					else j++;
+				}
+			
+			}
+			
+			//display the number of unplaced students
+			if(query == 4) {
+				int ans = 0;
+				for(int j=0;j<allstudents.size();j++) {
+					if(!allstudents.get(j).getplacementstatus()) ans ++;
+				}
+				System.out.println(ans + " students left");
+			}
+			
+			//Display the name of companies whose applications are open
+			if(query == 5) {
+		
+				for(int j=0;j<allcompanies.size();j++) {
+					if(allcompanies.get(j).getapplicationstatus() == "OPEN") {
+						System.out.println(allcompanies.get(j).getname());
+					}
+				}
+					
+			}
+			
+			//select students for a company
+			if(query == 6) {
+				String name = stdin.next();
+				mystudent[] selectedstudents;
+				boolean ans = false;
+				System.out.println("Roll Number of selected students");
+				for(int j=0;j< allcompanies.size();j++) {
+					if(!allstudents.get(j).getplacementstatus() && allcompanies.get(j).getname().equals(name)) {
+						selectstudents(allcompanies.get(j), allcompanies,allstudents);
+						ans = true;
+						break;
+					}
+				}
+				if(!ans) { System.err.println("Enter a valid company");
+				
+				}
+				
+				
+			}
+			
+			//Display details of the company
+			if(query == 7) {
+				boolean ans  = false;
+				String name = stdin.next();
+				for(int j=0;j<allcompanies.size();j++) {
+					if(allcompanies.get(j).getname().equals(name)) {
+						allcompanies.get(j).display();
+						ans = true;
+						break;
+					}
+				}
+				if(!ans) System.err.println("Enter a valid company");
+			}
+			
+			//Details of the student
+			if(query == 8) {
+				int rollnumber = stdin.nextInt();
+				boolean ans = false;
+				for(int j=0;j<allstudents.size();j++) {
+					if(allstudents.get(j).getrollnumber() == rollnumber) {
+						allstudents.get(j).display();
+						ans = true;
+						break;
+					}
+				}
+				if(!ans) System.err.println("Enter a valid Roll Number");
+			}
+			
+			//Display names of companies for which the student has applied and their scores in technical round of that company
+			if(query == 9) {
+				int rollnumber = stdin.nextInt();
+				boolean ans = false;
+				for(int j=0;j<allstudents.size();j++) {
+					
+					if(!allstudents.get(j).getplacementstatus() && allstudents.get(j).getrollnumber() == rollnumber) {
+						ArrayList<scores> studentx = allstudents.get(j).technicalscore;
+						//System.out.println(studentx.size());
+						for(int m = 0;m<studentx.size();m++) {
+							System.out.println(studentx.get(m).c.getname() + " " +  studentx.get(m).score);
+						}
+						ans = true;
+						break;
+					}
+				}
+				if(!ans) System.err.println("No Student with the given roll number has an account");
+			}
+		}
+	}
+
+}
+//mystudent class is only for companies to store data of students, students cannot access this.
+class mystudent {
+	private float cgpa;
+	private String stream;
+	private int rollnumber;
+	private boolean placementstatus;
+	public ArrayList<scores> technicalscore = new ArrayList<scores>();
+	private company company;
+	private ArrayList<company> companies;
+	
+	public mystudent(float cgpa, String stream, int rollnumber) {
+		this.cgpa = cgpa;
+		this.stream = stream;
+		this.rollnumber = rollnumber;
+		placementstatus = false;
+		companies = new ArrayList<company>();
+		company = null;
+	}
+	public float getcgpa() {
+		return cgpa;
+		
+	}
+	public String getstream() {
+		return stream;
+	}
+	public int getrollnumber() {
+		return rollnumber;
+	}
+	public boolean getplacementstatus() {
+		return placementstatus;
+	}
+	public void setplacementstatus(boolean k) {
+		placementstatus = k;
+	}
+
+	public void addcompany(company c) {
+		companies.add(c);
+	}
+	public void display() {
+		System.out.println(rollnumber);
+		System.out.println(cgpa);
+		System.out.println(stream);
+		System.out.print("Placement Status = ");
+		if(placementstatus) {
+			System.out.println("PLACED");
+			System.out.println("Company Placed = " + company.getname());
+		}
+		else System.out.print("NOT PLACED");
+		System.out.println();
+	}
+	
+	public void displaycompanies() {
+		
+	}
+	
+	
+}
+
+//company class in the main that companies can access, not students
+class company{
+	private String name;
+	private Set<String> eligiblecourses;
+	private int numberofstudentsreq;
+	private String applicationstatus;
+	public ArrayList<mystudent> students;
+	private int numbercourses;
+	public ArrayList<scores> technicalscore = new ArrayList<scores>();
+	
+	//constructor 
+	public company(String name, Set<String> eligiblecourses, int numberofstudentsreq, int numbercourses) {
+		this.name = name;
+		this.eligiblecourses = eligiblecourses;
+		this.numberofstudentsreq = numberofstudentsreq;
+		//this.students = students;
+		this.numbercourses = numbercourses;
+		applicationstatus = "OPEN";
+	}
+	
+	public String getname() {
+		return name;
+	}
+	
+	public String getapplicationstatus() {
+		return applicationstatus;
+	}
+	
+	public int getrequiredstudents() {
+		return numberofstudentsreq;
+	}
+	
+	public void setapplicationstatus(String s) {
+		applicationstatus = s;
+	}
+	
+
+	public void display() {
+		System.out.println(name);
+		System.out.println("Course Criteria");
+		Iterator<String> iterator = eligiblecourses.iterator();
+		
+		while(iterator.hasNext()){
+		  System.out.println(iterator.next());
+		}
+		System.out.println("Number of Required Students = " + numberofstudentsreq);
+		System.out.println("Application Status = " + applicationstatus);
+	}
+	
+
+}
+
+class scores {
+
+	public int score;
+	public mystudent s;
+	public company c;
+	
+	
+	public scores(company c, mystudent s) {
+		this.s = s;
+		this.c  = c;
+	}
+
+	
+}
+
+

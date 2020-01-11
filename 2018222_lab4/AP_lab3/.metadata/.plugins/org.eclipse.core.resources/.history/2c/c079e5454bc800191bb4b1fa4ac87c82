@@ -1,0 +1,92 @@
+package archlegends;
+import java.math.*;
+import java.util.Random;
+public class monster {
+	protected double HP;
+	protected int maxHP;
+	final protected int level;
+	protected int moves = 0;
+	protected int specialmove = Integer.MAX_VALUE;
+	protected boolean specialmage = false;
+	public monster(int level, int HP) {
+		this.level = level;
+		this.HP = this.maxHP =HP;
+	}
+	public int attack() {
+		int n =  (int) ((HP)/4);
+		double mean = (n)/2;
+		double sd =  Math.sqrt((n*n -1)/12);
+        Random r = new Random();
+        if(moves>specialmove) specialmove = Integer.MAX_VALUE; 
+        if(specialmage) {
+        	this.HP-= 0.95*this.HP; 
+        }
+        
+        moves++;
+        return Math.abs((int) (r.nextGaussian() * sd ))+ (int)mean;
+
+	}
+	public int getlevel() {
+		return this.level;
+	}
+	public void specialmove(Hero hero) {
+		if(hero instanceof Mage) {
+			specialmove = moves;
+			this.specialmage = true;
+		}
+		if(hero instanceof Thief) {
+			this.HP = 0.7*this.HP;
+		}
+	}
+	public double getHP() {
+		return this.HP;
+	}
+	public int getmaxHP() {
+		return this.maxHP;
+	}
+	public boolean isdead() {
+		return this.HP<0;
+	}
+	public void attacked(int attack) {
+		this.HP-=attack;
+	}
+}
+
+final class Goblin extends monster{
+
+	public Goblin() {
+		super(1, 100);
+	}
+
+}
+
+final class Zombie extends monster{
+
+	public Zombie() {
+		super(2, 100);
+	}
+}
+
+final class Fiend extends monster{
+
+	public Fiend() {
+		super(3, 200);
+	}
+}
+
+final class Lionfang extends monster{
+
+	public Lionfang() {
+		super(4, 250);
+	}
+	
+	@Override
+	public int attack() {
+		Random r = new Random();
+        int ans = r.nextInt(10) + 1;
+        if(ans==1) {
+        	return -1;
+        }
+        else return super.attack();
+	}
+}

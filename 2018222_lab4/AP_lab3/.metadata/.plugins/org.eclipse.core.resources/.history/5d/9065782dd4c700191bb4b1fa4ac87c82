@@ -1,0 +1,6 @@
+package archlegends;
+
+public class user {
+	final private String username;
+	
+}

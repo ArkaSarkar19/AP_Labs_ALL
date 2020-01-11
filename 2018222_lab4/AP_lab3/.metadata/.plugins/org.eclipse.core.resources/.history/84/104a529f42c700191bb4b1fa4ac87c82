@@ -1,0 +1,16 @@
+package archlegends;
+import java.math.*;
+public class monster {
+	private double HP;
+	final private int level;
+	
+	public monster(int level, int HP) {
+		this.level = level;
+		this.HP = HP;
+	}
+	public int attack() {
+		int n =  (int) ((HP+1)/2);
+		int mean = (n+1)/2;
+		int sd = 
+	}
+}

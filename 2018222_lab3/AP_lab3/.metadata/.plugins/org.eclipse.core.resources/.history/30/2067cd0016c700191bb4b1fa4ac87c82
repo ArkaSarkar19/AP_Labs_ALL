@@ -1,0 +1,8 @@
+package archlegends;
+public interface hero {
+	public void attack();
+	public void defense();
+	public void specialmove();
+}
+
+class 
